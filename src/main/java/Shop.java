@@ -5,7 +5,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.List;
 //TODO 1.zmien tytul ramki odpowiadajacy naszemu programowi i przetestuj
 //TODO 2.zmien tytul w buttonie
 //TODO 3.pobaw sie tym co mamy w chwili obecnej
@@ -26,21 +31,31 @@ public class Shop extends Application {
         primaryStage.setTitle("Shop");
 
 
-
         TextField textField = new TextField();
         TextField textField1 = new TextField();
         Button addCustomerBtn = new Button("Add new Customer to list");
         Button showCustomersBtn = new Button("Show Customers from the List");
         Button removeCustomerBtn = new Button("Remove Customers from List");
-        Button openNewWindowBtn = new Button ("Open new window");
+        Button openNewWindowBtn = new Button("Open new window");
 
-        ArrayList<Customer> customers = new ArrayList<>();//TODO Tak sie wyswietla tablice!!!
 
+        List<Customer> customers = new ArrayList<>();//TODO Tak sie wyswietla tablice!!!
 
         addCustomerBtn.setOnAction(action -> {
+
             Customer customer = new Customer(textField.getText(), textField1.getText());
             System.out.println("Customer has been created" + customer);
             customers.add(customer); //TODO  DZISIAJ, Dodawanie Customera do listy!!!!
+            File file = new File("ListOfCustomers.txt");
+            PrintWriter printWriter = null; //TODO Dlaczego tutaj jest null?
+            try {
+                printWriter = new PrintWriter(new FileWriter(file, true));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            printWriter.println(customer.getName() + " " + customer.getSurname());
+            printWriter.close();
+
         });
 
         showCustomersBtn.setOnAction(action -> {
@@ -59,24 +74,18 @@ public class Shop extends Application {
 
         });
 
-        openNewWindowBtn.setOnAction(action ->{
+        openNewWindowBtn.setOnAction(action -> {
             HBox hbox1 = new HBox(removeCustomerBtn);
-            Scene scene1 = new Scene(hbox1,400,400);
+            Scene scene1 = new Scene(hbox1, 400, 400);
             primaryStage.setScene(scene1);
             primaryStage.show();
 
         });
 
-
         HBox hbox = new HBox(textField, textField1, addCustomerBtn, showCustomersBtn, openNewWindowBtn);
-
         Scene scene = new Scene(hbox, 740, 400);
         primaryStage.setScene(scene);
         primaryStage.show();
-
-
-
-
 
     }
 
